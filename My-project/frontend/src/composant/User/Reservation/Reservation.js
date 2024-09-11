@@ -27,7 +27,7 @@ function Reservation() {
         try {
             await addReservation(userId, reservationData);
            await  alert('Reservation created successfully');
-           // navigate(`/user/${userId}`);
+            navigate(`/user`);
         } catch (error) {
             console.error('Failed to create reservation', error);
             alert('Failed to create reservation');
