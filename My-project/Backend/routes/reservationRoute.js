@@ -1,63 +1,65 @@
 const express = require('express');
-const reservationSchema = require('../model/reservation'); // Import the Reservation schema
-const User = require('../model/auth')
-const reservationRoute = express.Router();
+const router = express.Router();
+const Reservation = require('../model/reservation'); // Adjust the path to your reservation model
 
-// http://localhost:5000/reservation/:userId
 // Create a new reservation
-reservationRoute.post('/:userId', async (req, res) => {
-    try {
+router.post('/:userId', async (req, res) => {
+    const { userId } = req.params;
+    const { name, number, date, time, guests } = req.body;
 
-      const {userId} = req.params;
-      const newReservation = new reservationSchema(req.body);
-      const user = await User.findById(userId)
-      await newReservation.save();
-      res.status(201).json({msg:"Reservation created successfully",newReservation});
-    } catch (err) {
-      console.log(err)
+    if (!userId || !name || !number || !date || !time || !guests) {
+        return res.status(400).json({ message: 'All fields are required.' });
     }
-  });
 
-
-// http://localhost:5000/reservation/getall
-  reservationRoute.get('/getall', async (req, res) => {
     try {
-      const reservations = await reservationSchema.find();
-      res.status(200).json({msg:"you get all reservation",reservations});
-    } catch (err) {
-      console.log(err)
+        const newReservation = new Reservation({
+            userId,
+            name,
+            number,
+            date,
+            time,
+            guests,
+        });
+
+        await newReservation.save();
+        res.status(201).json({ message: 'Reservation created successfully' });
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to create reservation', error });
     }
-  });
+});
 
-// http://localhost:5000/reservation/delete/:id
-reservationRoute.delete('/delete/:id', async (req,res)=>{
-  try{
-  const {id} = req.params
-  const deleteReservation = await reservationSchema.findByIdAndDelete(id)
-  res.status(200).json({msg:'you delete reservation'})
-}
-catch(err){
-  console.log(err)
-  res.send('you have a problem')
-}
-})
+// Get all reservations for a user
+router.get('/:userId', async (req, res) => {
+    const { userId } = req.params;
 
-// localhost:5000/reservation/getunique/:id
+    try {
+        const reservations = await Reservation.find({ userId });
+        res.status(200).json(reservations);
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to fetch reservations', error });
+    }
+});
 
-reservationRoute.get('/getunique/:id', async(req,res)=>{
-  try{
-      const { id } = req.params
+// Update reservation status (confirm or cancel)
+router.patch('/:reservationId', async (req, res) => {
+    const { reservationId } = req.params;
+    const { status } = req.body;
 
-      const getreservation = await reservationSchema.findById( id )
-      res.status(200).json({msg: "you get reservation", getreservation})
-      }
-  catch(err){
-      console.log(err)
-      res.send("you have a problem")
-  }
-})
+    if (!['pending', 'confirmed', 'cancelled'].includes(status)) {
+        return res.status(400).json({ message: 'Invalid status value' });
+    }
 
+    try {
+        const updatedReservation = await Reservation.findByIdAndUpdate(
+            reservationId,
+            { status },
+            { new: true }
+        );
 
+        res.status(200).json(updatedReservation);
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to update reservation status', error });
+    }
+});
 
-
-module.exports = reservationRoute;
+module.exports = router;

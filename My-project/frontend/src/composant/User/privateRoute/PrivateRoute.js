@@ -43,7 +43,7 @@ function PrivateRoute(auth) {
     <div>
       
       
-      {authUser.role === "admin" ? <Admin auth={auth} Logout={Logout}/> : <User auth={auth} Logout={Logout} />}
+      {authUser.role === "admin" ? <Admin auth={authUser} Logout={Logout}/> : <User auth={authUser} Logout={Logout} />}
       
     </div>
   ) : (

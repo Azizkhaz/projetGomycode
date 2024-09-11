@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 const reservationSchema = mongoose.Schema({
 
     userId: { type: mongoose.Schema.Types.ObjectId,
-         ref: 'User', 
+         ref: 'authSchema', 
          required: true },
     name:{
         type:String,

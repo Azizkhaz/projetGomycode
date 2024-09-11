@@ -1,10 +1,14 @@
 import axios from "axios";
 
 // add reservation
-export const Addreservation = async (userId,value) =>{
-    
-    const addingreservation = await axios.post(`http://localhost:5000/reservation/${userId}`, {...value})
-}
+export const addReservation = async (userId, reservationData) => {
+    try {
+        const response = await axios.post(`http://localhost:5000/reservation/${userId}`, reservationData);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
 
 // get all reservation
 
