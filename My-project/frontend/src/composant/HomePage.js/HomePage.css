@@ -1,0 +1,64 @@
+/* Navbar.css */
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #da5107;
+    color: white;
+  }
+  
+  .navbar-brand {
+    display: flex;
+    align-items: center;
+  }
+  
+  .navbar-logo {
+    height: 40px;
+    margin-right: 10px;
+  }
+  
+  .navbar-links {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .navbar-link {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+  }
+  
+  .navbar-link:hover {
+    color: #e67e22;
+  }
+  
+  .navbar-buttons {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .navbar-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #e44e08;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .navbar-button:hover {
+    background-color: #d04601;
+  }
+  
+  .signup-button {
+    background-color: #e75f04;
+  }
+  
+  .signup-button:hover {
+    background-color: #d85d06;
+  }
+  
